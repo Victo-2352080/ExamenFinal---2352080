@@ -1,0 +1,97 @@
+/* Reset de base */
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Conteneur principal */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  
+  /* Titre principal */
+  #title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  #main-titre {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  #sous-nom,
+  #sous-da {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Structure principale */
+  main {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Formulaires */
+  #section-creationUtilisateur,
+  #section-form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    min-width: 280px;
+  }
+  
+  #section-form {
+    border-right: none;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  
+  /* Labels et inputs */
+  label {
+    margin: 10px 0 5px;
+    font-weight: 500;
+  }
+  
+  input[type="text"] {
+    padding: 10px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  /* Radio et checkbox inline */
+  input[type="radio"] {
+    margin-right: 5px;
+    transform: scale(1.1);
+  }
+  
+  /* Boutons */
+  button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #999;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+  

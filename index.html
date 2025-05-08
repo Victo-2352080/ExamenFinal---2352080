@@ -1,0 +1,51 @@
+<!DOCTYPE html
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Examen Final - 2352080</title>
+
+        <link rel="stylesheet" href="./css/style.css">
+        <script defer src="./js/script.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+
+            <main>
+
+                <div id="title">
+                    <h1 id="main-titre">Épreuve Final - Service Web H25</h1>
+                    <span id="sous-nom">Nathan Grondin</span> | <span id="sous-da">2352080</span>
+                </div>
+
+                <div id="section-creationUtilisateur">
+                    <h2>Création d'un utilisateur</h2>
+                    
+                    <label for="uti-prenom">Prénom</label>
+                    <input type="text" id="uti-prenom" name="uti-prenom" placeholder="Entrez le prénom" required>
+                    <label for="uti-nom">Nom</label>
+                    <input type="text" id="uti-nom" name="uti-nom" placeholder="Entrez le nom" required>
+                    <label for="uti-courriel">Courriel</label>
+                    <input type="text" id="uti-courriel" name="uti-courriel" placeholder="Entrez le courriel" required>
+                    <label for="uti-mdp">Mot de Passe</label>
+                    <input type="text" id="uti-mdp" name="uti-mdp" placeholder="********" required>
+                    <button id="btn-creer">Créer</button>
+                </div>
+
+                <div id="section-form">
+                    <h2>Récupération d'une clé api</h2>
+
+                    <label for="cle-courriel">Couriel</label>
+                    <input type="text" id="cle-courriel" name="cle-courriel" placeholder="votre courriel" required>
+                    <label for="cle-mdp">Mot de Passe</label>
+                    <input type="text" id="cle-mdp" name="cle-mdp" placeholder="*********" required>
+                    <input type="radio" id="cle-gnr" name="cle-gnr">
+                    <label for="cle-gnr">Générer une nouvelle clé</label>
+                    <button id="btn-recup">Récuperer</button>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
