@@ -116,8 +116,8 @@ const AjouteTaches = async (req, res) => {
     }
 
     try {
-        await modelsApi.ajouterTache(utilisateur.id, titre, description, date_echeance);
-        res.status(201).json({ message: "Tâche ajoutée avec succès" });
+        const tache = await modelsApi.ajouterTache(utilisateur.id, titre, description, date_echeance);
+        res.status(201).json({ message: "Tâche ajoutée avec succès", id: tache.rows[0].id });
     } catch (err) {
         console.error("Erreur ajout tâche:", err);
         res.status(500).json({ message: "Erreur serveur", erreur: err.message });
@@ -182,15 +182,8 @@ const ModifierTache = async (req, res) => {
     }
 
     try {
-        const query = `
-            UPDATE taches
-            SET titre = $1, description = $2, date_echeance = $3
-            WHERE id = $4 AND utilisateur_id = $5
-            RETURNING *;
-        `;
-        const values = [titre, description, date_echeance, id, utilisateur.id];
-
-        const result = await modelsApi.query(query, values);
+        const result = await modelsApi.modifierTache(id, utilisateur.id, titre, description, date_echeance);
+        
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "Tâche non trouvée ou non autorisée." });
         }
@@ -201,6 +194,7 @@ const ModifierTache = async (req, res) => {
         res.status(500).json({ message: "Erreur serveur", erreur: err.message });
     }
 };
+
 
 const ModifierStatutTache = async (req, res) => {
     const cleApi = req.headers['cle_api'];
@@ -257,43 +251,52 @@ const addSousTache = async (req, res) => {
         return res.status(403).json({ message: "Clé API invalide ou manquante" });
     }
 
-    const id_tache = parseInt(req.params.id_tache);
-    const { titre, description, statut } = req.body;
-  
+    const id_tache = parseInt(req.params.id);
+    const { titre, complete } = req.body;
+
     if (isNaN(id_tache)) return res.status(400).json({ message: 'ID de tâche invalide' });
-    if (!titre || !description || !statut) return res.status(400).json({ message: 'Titre, description et statut sont requis' });
-  
+    if (!titre || typeof complete !== "boolean")
+        return res.status(400).json({ message: 'Titre et état "complete" sont requis' });
+
     try {
-      const sousTacheAjoutee = await modele.ajouterSousTache(id_tache, titre, description, statut);
-      res.status(201).json(sousTacheAjoutee);
+        const sousTacheAjoutee = await modelsApi.ajouterSousTache(id_tache, titre, complete);
+        res.status(201).json(sousTacheAjoutee);
     } catch (erreur) {
-      console.error(erreur);
-      res.status(500).json({ message: 'Erreur lors de l\'ajout de la sous-tâche' });
+        console.error(erreur);
+        res.status(500).json({ message: 'Erreur lors de l\'ajout de la sous-tâche' });
     }
-  };
+};
+
   
 const modifySousTache = async (req, res) => {
     const cleApi = req.headers['cle_api'];
     const utilisateur = await validerCleApi(cleApi);
+    
     if (!utilisateur) {
         return res.status(403).json({ message: "Clé API invalide ou manquante" });
     }
 
     const { id } = req.params;
-    const { titre, description, statut } = req.body;
-  
-    if (!titre || !description || !statut) return res.status(400).json({ message: 'Titre, description et statut sont requis' });
-  
-    try {
-      const sousTacheModifiee = await modele.modifierSousTache(id, titre, description, statut);
-      if (!sousTacheModifiee) return res.status(404).json({ message: 'Sous-tâche non trouvée' });
-      res.json(sousTacheModifiee);
-    } catch (erreur) {
-      console.error(erreur);
-      res.status(500).json({ message: 'Erreur lors de la modification de la sous-tâche' });
+    const { titre, complete } = req.body;
+
+    if (!titre || typeof complete !== "boolean") {
+        return res.status(400).json({ message: 'Titre et état "complete" sont requis' });
     }
-  };
-  
+
+    try {
+        const sousTacheModifiee = await modelsApi.modifierSousTache(id, titre, complete);
+        
+        if (!sousTacheModifiee) {
+            return res.status(404).json({ message: 'Sous-tâche non trouvée' });
+        }
+        res.json(sousTacheModifiee);
+    } catch (erreur) {
+        console.error(erreur);
+        res.status(500).json({ message: 'Erreur lors de la modification de la sous-tâche' });
+    }
+};
+
+
 const modifyStatutSousTache = async (req, res) => {
     const cleApi = req.headers['cle_api'];
     const utilisateur = await validerCleApi(cleApi);
@@ -302,39 +305,40 @@ const modifyStatutSousTache = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { statut } = req.body;
-  
-    if (!statut) return res.status(400).json({ message: 'Statut requis' });
-  
+    const { complete } = req.body;
+
+    if (typeof complete !== "boolean") return res.status(400).json({ message: 'État "complete" requis' });
+
     try {
-      const sousTacheModifiee = await modele.modifierStatutSousTache(id, statut);
-      if (!sousTacheModifiee) return res.status(404).json({ message: 'Sous-tâche non trouvée' });
-      res.json(sousTacheModifiee);
+        const sousTacheModifiee = await modelsApi.modifierStatutSousTache(id, complete); 
+        if (!sousTacheModifiee) return res.status(404).json({ message: 'Sous-tâche non trouvée' });
+        res.json(sousTacheModifiee);
     } catch (erreur) {
-      console.error(erreur);
-      res.status(500).json({ message: 'Erreur lors de la modification du statut de la sous-tâche' });
+        console.error(erreur);
+        res.status(500).json({ message: 'Erreur lors de la modification du statut de la sous-tâche' });
     }
-  };
-  
+};
+
 const DeleteSousTache = async (req, res) => {
     const cleApi = req.headers['cle_api'];
     const utilisateur = await validerCleApi(cleApi);
     if (!utilisateur) {
         return res.status(403).json({ message: "Clé API invalide ou manquante" });
     }
-    
+
     const { id } = req.params;
-  
+
     try {
-      const resultat = await modele.supprimerSousTache(id);
-      if (resultat === 0) return res.status(404).json({ message: 'Sous-tâche non trouvée' });
-      res.status(204).end(); // Pas de contenu, suppression réussie
+        const resultat = await modelsApi.supprimerSousTache(id);
+        if (resultat === 0) return res.status(404).json({ message: 'Sous-tâche non trouvée' });
+        res.status(204).end();
     } catch (erreur) {
-      console.error(erreur);
-      res.status(500).json({ message: 'Erreur lors de la suppression de la sous-tâche' });
+        console.error(erreur);
+        res.status(500).json({ message: 'Erreur lors de la suppression de la sous-tâche' });
     }
-  };
-  
+};
+
+
 
 export {
     AjouterUtilisateur,

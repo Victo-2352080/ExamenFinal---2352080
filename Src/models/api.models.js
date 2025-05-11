@@ -74,6 +74,23 @@ const ajouterTache = (utilisateur_id, titre, description, date_echeance) => {
     });
 };
 
+const modifierTache = (id, utilisateur_id, titre, description, date_echeance) => {
+    const query = `
+        UPDATE taches
+        SET titre = $1, description = $2, date_echeance = $3
+        WHERE id = $4 AND utilisateur_id = $5
+        RETURNING *;
+    `;
+    const values = [titre, description, date_echeance, id, utilisateur_id];
+
+    return new Promise((resolve, reject) => {
+        db.query(query, values)
+            .then(result => resolve(result))
+            .catch(error => reject(error));
+    });
+};
+
+
 const getTaches = (utilisateur_id, toutes) => {
     const query = toutes
         ? `SELECT * FROM taches WHERE utilisateur_id = $1 ORDER BY date_echeance ASC;`
@@ -115,20 +132,17 @@ const supprimerTache = (id) => {
     });
 };
 
-const ajouterSousTache = (tache_id, titre) => {
+const ajouterSousTache = (tache_id, titre, complete) => {
     const query = `
         INSERT INTO sous_taches (tache_id, titre, complete)
-        VALUES ($1, $2, false)
+        VALUES ($1, $2, $3)
         RETURNING *;
     `;
-    const values = [tache_id, titre];
+    const values = [tache_id, titre, complete];
 
-    return new Promise((resolve, reject) => {
-        db.query(query, values)
-            .then(result => resolve(result))
-            .catch(error => reject(error));
-    });
+    return db.query(query, values);
 };
+
 
 const getSousTaches = (tache_id) => {
     const query = `SELECT * FROM sous_taches WHERE tache_id = $1 ORDER BY id ASC;`;
@@ -167,6 +181,30 @@ const supprimerSousTache = (id) => {
             .catch(error => reject(error));
     });
 };
+
+const modifierSousTache = (id, titre, complete) => {
+    const query = `
+        UPDATE sous_taches
+        SET titre = $2, complete = $3
+        WHERE id = $1
+        RETURNING id, tache_id, titre, complete;
+    `;
+    const values = [id, titre, complete];
+
+    return db.query(query, values)
+        .then(result => {
+            if (result.rows.length === 0) {
+                throw new Error("Sous-tâche non trouvée avec cet ID");
+            }
+            return result.rows[0]; 
+        })
+        .catch(err => {
+            console.error("Erreur lors de la modification de la sous-tâche:", err.message || err);
+            throw new Error("Erreur lors de la modification de la sous-tâche : " + err.message);
+        });
+};
+
+
   
 
 export default {
@@ -176,10 +214,12 @@ export default {
     RechercherParCleApi,
     ajouterTache,
     getTaches,
+    modifierTache,
     modifierStatutTache,
     supprimerTache,
     ajouterSousTache,
     getSousTaches,
     modifierStatutSousTache,
     supprimerSousTache,
+    modifierSousTache
 };
