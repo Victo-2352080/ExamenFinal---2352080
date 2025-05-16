@@ -1,0 +1,725 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "API Utilisateurs",
+        "version": "1.0.0",
+        "description": "API REST pour la gestion des utilisateurs avec authentification par clé API."
+    },
+    "paths": {
+        "/utilisateurs": {
+            "post": {
+                "summary": "Créer un nouvel utilisateur",
+                "tags": [
+                    "Utilisateur"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "prenom": {
+                                        "type": "string",
+                                        "example": "Nathan"
+                                    },
+                                    "nom": {
+                                        "type": "string",
+                                        "example": "Grondin"
+                                    },
+                                    "courriel": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@example.com"
+                                    },
+                                    "mot_de_passe": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    }
+                                },
+                                "required": [
+                                    "prenom",
+                                    "nom",
+                                    "courriel",
+                                    "mot_de_passe"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "prenom": {
+                                            "type": "string",
+                                            "example": "Nathan"
+                                        },
+                                        "nom": {
+                                            "type": "string",
+                                            "example": "Grondin"
+                                        },
+                                        "courriel": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "test@example.com"
+                                        },
+                                        "cle_api": {
+                                            "type": "string",
+                                            "example": "ABC123XYZ"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "prenom",
+                                        "nom",
+                                        "courriel",
+                                        "cle_api"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Information manquant dans le body"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/utilisateur/cle": {
+            "post": {
+                "summary": "Générer une nouvelle clé API",
+                "tags": [
+                    "Utilisateur"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "courriel": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@example.com"
+                                    },
+                                    "mot_de_passe": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    }
+                                },
+                                "required": [
+                                    "courriel",
+                                    "mot_de_passe"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Clé API générée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Nouvelle clé API reussis"
+                                        },
+                                        "cle_api": {
+                                            "type": "string",
+                                            "example": "a1b2c3d4e5f6..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Courriel ou mot de passe manquant"
+                    },
+                    "401": {
+                        "description": "Mot de passe invalide"
+                    },
+                    "404": {
+                        "description": "Aucun utilisateur trouvé avec ce courriel"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Récupérer une clé API existante",
+                "tags": [
+                    "Utilisateur"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "courriel": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@example.com"
+                                    },
+                                    "mot_de_passe": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    }
+                                },
+                                "required": [
+                                    "courriel",
+                                    "mot_de_passe"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Clé API existante récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Clé API existante récupérée."
+                                        },
+                                        "cle_api": {
+                                            "type": "string",
+                                            "example": "a1b2c3d4e5f6..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Courriel ou mot de passe manquant"
+                    },
+                    "401": {
+                        "description": "Mot de passe invalide"
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/taches/{id}": {
+            "get": {
+                "summary": "Récupérer une tâche par son ID",
+                "tags": [
+                    "Tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tâche trouvée"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Modifier une tâche",
+                "tags": [
+                    "Tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "date_echeance": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "required": [
+                                    "titre",
+                                    "description",
+                                    "date_echeance"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tâche modifiée avec succès"
+                    },
+                    "400": {
+                        "description": "Données manquantes"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer une tâche",
+                "tags": [
+                    "Tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tâche supprimée avec succès"
+                    },
+                    "400": {
+                        "description": "ID requis"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/taches/{id}/statut": {
+            "patch": {
+                "summary": "Modifier le statut (complete) d'une tâche",
+                "tags": [
+                    "Tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "complete": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "complete"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Statut mis à jour avec succès"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/taches": {
+            "post": {
+                "summary": "Ajouter une nouvelle tâche",
+                "tags": [
+                    "Tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "date_echeance": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "required": [
+                                    "titre",
+                                    "description",
+                                    "date_echeance"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tâche créée avec succès"
+                    },
+                    "400": {
+                        "description": "Données manquantes"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/taches/{id}/sous-taches": {
+            "post": {
+                "summary": "Ajouter une sous-tâche à une tâche",
+                "tags": [
+                    "Sous-tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "complete": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "titre",
+                                    "complete"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sous-tâche ajoutée"
+                    },
+                    "400": {
+                        "description": "Requête invalide"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/sous-taches/{id}": {
+            "put": {
+                "summary": "Modifier une sous-tâche",
+                "tags": [
+                    "Sous-tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "titre": {
+                                        "type": "string"
+                                    },
+                                    "complete": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "titre",
+                                    "complete"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sous-tâche modifiée"
+                    },
+                    "400": {
+                        "description": "Requête invalide"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer une sous-tâche",
+                "tags": [
+                    "Sous-tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sous-tâche supprimée"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        },
+        "/sous-taches/{id}/statut": {
+            "patch": {
+                "summary": "Modifier le statut d'une sous-tâche",
+                "tags": [
+                    "Sous-tâches"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cle_api",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "complete": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": [
+                                    "complete"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Statut de la sous-tâche mis à jour"
+                    },
+                    "400": {
+                        "description": "Requête invalide"
+                    },
+                    "403": {
+                        "description": "Clé API invalide ou manquante"
+                    },
+                    "404": {
+                        "description": "Sous-tâche non trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                }
+            }
+        }
+    }
+}

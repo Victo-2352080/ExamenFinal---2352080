@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS public.utilisateur;
 
 CREATE TABLE utilisateur (
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(30),
-    prenom VARCHAR(30),
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
     courriel VARCHAR(255),
-    cle_api VARCHAR(32),
+    cle_api VARCHAR(100),
     password VARCHAR(100)
 );
 

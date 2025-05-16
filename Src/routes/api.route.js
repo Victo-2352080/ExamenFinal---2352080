@@ -9,7 +9,6 @@ router.get('/utilisateur/cle', ctrl.CleApiUtilisateur);
 
 router.get('/taches', ctrl.ChercherTaches);
 router.get('/taches/:id', ctrl.GetTachesId);
-
 router.post('/taches', ctrl.AjouteTaches);
 router.put('/taches/:id', ctrl.ModifierTache);
 router.patch('/taches/:id/statut', ctrl.ModifierStatutTache);
