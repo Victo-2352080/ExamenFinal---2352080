@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import router from './Src/routes/api.route.js';
 
 import fs from 'fs';
-const swaggerDocument = JSON.parse(fs.readFileSync('./src/config/documentation.json', 'utf8'));
+const swaggerDocument = JSON.parse(fs.readFileSync('./Src/config/documentation.json', 'utf8'));
 const swaggerOptions = {
     customCss: '.swagger-ui .topbar { display: none }',
     customSiteTitle: "ExamenFinal-2352080"
