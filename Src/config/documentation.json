@@ -6,7 +6,7 @@
         "description": "API REST pour la gestion des utilisateurs avec authentification par clé API."
     },
     "paths": {
-        "/utilisateurs": {
+        "/api/utilisateur": {
             "post": {
                 "summary": "Créer un nouvel utilisateur",
                 "tags": [
@@ -98,7 +98,7 @@
                 }
             }
         },
-        "/utilisateur/cle": {
+        "/api/utilisateur/cle": {
             "post": {
                 "summary": "Générer une nouvelle clé API",
                 "tags": [
@@ -232,7 +232,7 @@
                 }
             }
         },
-        "/taches/{id}": {
+        "/api/taches/{id}": {
             "get": {
                 "summary": "Récupérer une tâche par son ID",
                 "tags": [
@@ -378,7 +378,7 @@
                 }
             }
         },
-        "/taches/{id}/statut": {
+        "/api/taches/{id}/statut": {
             "patch": {
                 "summary": "Modifier le statut (complete) d'une tâche",
                 "tags": [
@@ -436,7 +436,7 @@
                 }
             }
         },
-        "/taches": {
+        "/api/taches": {
             "post": {
                 "summary": "Ajouter une nouvelle tâche",
                 "tags": [
@@ -495,7 +495,7 @@
                 }
             }
         },
-        "/taches/{id}/sous-taches": {
+        "/api/taches/{id}/sous-taches": {
             "post": {
                 "summary": "Ajouter une sous-tâche à une tâche",
                 "tags": [
@@ -557,7 +557,7 @@
                 }
             }
         },
-        "/sous-taches/{id}": {
+        "/api/sous-taches/{id}": {
             "put": {
                 "summary": "Modifier une sous-tâche",
                 "tags": [
@@ -660,7 +660,7 @@
                 }
             }
         },
-        "/sous-taches/{id}/statut": {
+        "/api/sous-taches/{id}/statut": {
             "patch": {
                 "summary": "Modifier le statut d'une sous-tâche",
                 "tags": [
